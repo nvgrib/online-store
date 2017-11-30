@@ -1,0 +1,62 @@
+{% extends "products/base.html" %}
+{% load staticfiles %}
+{% load static %}
+
+
+{% block content %}
+<section class="image-price-buttom-description">
+	<div class="wrapper-image">
+		<img src="{{ product.image.url }}" alt="{{product.fulll_name}}"><br>
+	</div>
+	<div class="wrapper-price-button-discription">
+		{% if product.description %}
+		<p>{{ product.description }}</p>
+		{% endif %}
+		<div class="wrapper-span-form">
+		<span>{{ product.price }} $</span>
+			<form action="" method="post">
+			{% csrf_token %}
+				<input type="submit" value="Add to cart" name="add_to_cart" class="add-to-cart">
+			</form>
+		</div>
+	</div>
+</section>
+<section class="product-details"> 
+	<h6>Details</h6>
+	<ul >
+		<li>Code: {{ product.slug }}</li>
+		<li>Category: {{ product.category }}</li>
+		<li>Manufacturer: {{ product.manufacturer.name }}</li>
+		<li>Model: {{ product.name }}</li>
+		<li>Stock: {{ product.stock }}</li>
+	</ul>
+</section>
+{% if user.is_authenticated %}
+<article class="comment-form">
+	<form action="" method='post'>
+	{% csrf_token %}
+	{{ comment_form.text }}
+	<input type="submit" value="Add comment">
+</article>
+{% endif %}
+<article class="comments">
+	{% if comments %}
+		{% for comment in comments %}
+		<ul>
+			<li class="comment-username"><time datetime="{{ comment.created|date:'c' }}" title="{{ comment.created|date:'d.m.y' }} in {{ comment.created|date:'H:i' }}" pubdate>{{ comment.created }}</time> <span>{{ comment.user.username }}</span></li>
+			<li class="comment-text">{{ comment.text }}</li>
+			<li class="comment-image"><span>{{ comment.likes.count }}	</span><a href="/add_remove_like/{{ comment.id }}/"><img src="{% static 'comments/like.png' %}"></a></li>
+		</ul>
+		{% endfor %}
+	{% else %}
+		<p>No comments yet</p>
+	{% endif %}
+</article>
+
+<div itemscope itemtype="http://schema.org/Book">
+I love that Introducing HTML5 by Bruce Lawson and Remy Sharp
+¬ (ISBN 0321784421)
+</div>
+{% endblock content %}
+
+

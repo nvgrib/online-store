@@ -1,0 +1,52 @@
+{% extends 'shopping_carts/base.html' %}
+
+
+{% block content %}
+	<section class="shopping-cart-items">
+		{% for item in shopping_cart_items %}
+		<article class="shopping-cart-item">
+			<!-- 1 -->
+			<div class="shopping-cart-item-image">
+				<img src="{{ item.product.image.url }}">
+			</div>
+			<!-- 2 -->
+			<div class="shopping-cart-item-full-name">
+				<a href="{% url 'categories:products:product_details' item.product.category item.product.name %}"><span class="full-name">{{ item.product.full_name }}</span></a>
+			</div>
+			<!-- 3 -->
+			<div class="shopping-cart-item-count">
+				
+			</div>
+			<!-- 4 -->
+			<div class="shopping-cart-item-price">
+				<span class="price">{{ item.product.price }} $</span>
+			</div>
+			<!-- 5 -->
+			<div class="shopping-cart-item-del-item">
+				<form action="{% url 'shopping_carts:delete_shopping_cart_item' item.id %}" method="post">
+				{% csrf_token %}
+					<input type="hidden" value="{{ item.id }}" name="shopping_cart_item_id" >
+					<input type="submit" value="Remove from cart" name="del_from_cart" >
+				</form>
+			</div>
+		</article>
+		{% endfor %}
+	</section>
+
+	{% if shopping_cart_items %}
+	<section class='shopping-cart-payment-form'>
+		<article >
+			<div></div>
+			<div class="shopping_cart-total-price">
+				<span>{{shopping_cart_items.0.shopping_cart.total_price}} $</span>
+			</div>
+			<div class='shopping-cart-payment-form'>
+				<form action="/payment-for-shopping-cart-items/" method="post">
+				{% csrf_token %}
+					<input type="submit" value="Payment" name="payment_for_shopping_cart_items" >
+				</form>
+			</div>
+		</article>
+	</section>
+	{% endif %}
+{% endblock content %}

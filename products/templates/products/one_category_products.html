@@ -1,0 +1,31 @@
+{% extends "products/base.html" %}
+
+
+{% block content %}
+
+<h5 class="category-name">{{products.0.category.name}}{{products|pluralize}}</h5>
+<ul class="one-category-products">
+	{% for product in products %}
+	<li>
+		<div><img src="{{ product.image.url }}"></div>
+		<div>
+			<a href="{% url 'categories:products:product_details' product.category.name|lower product.url_name|lower %}">{{ product.manufacturer.name }} {{ product.name }}</a>
+			<ul>
+				<li>Code: {{ product.slug }}</li>
+				<li>Manufacturer: {{ product.manufacturer.name }}</li>
+				<li>Stock: {{ product.stock }}</li>
+
+			</ul>
+		</div>
+		<div>
+			<p>{{ product.price }} $</p>
+			<form action="{% url 'shopping_carts:add_shopping_cart_item' product.id %}" method="post">
+				{% csrf_token %}
+				<input type="submit" class="btn" value="Add to cart" name="add_to_cart">
+			</form>
+		</div>
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock content %}

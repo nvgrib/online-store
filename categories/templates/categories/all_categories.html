@@ -1,0 +1,9 @@
+{% extends "categories/base_categories.html" %}
+
+{% block content %}
+	<ul class="category-list">
+		{% for category in categories %}
+		<li><a href="{% url 'categories:products:one_category_products' category.name|lower %}">{{ category.name }}{{ category.products.count|pluralize}}</a></li>
+		{% endfor %}
+	</ul>
+{% endblock content %}

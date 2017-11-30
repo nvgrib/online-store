@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'online_store/css/base.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'online_store/css/navbase.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'categories/css/category_list.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'products/css/one_category_products.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'shopping_carts/css/shopping_cart.css' %}">
+	<title>The simplest online store!</title>
+</head>
+
+<body>
+	<header>
+		<nav class="base">
+			<a href="/">Main</a>
+			<a href="#">About company</a>
+			<a href="{% url 'categories:all_categories' %}">Categories</a>
+			<a href="#">Delivery</a>
+			<a href="{% url 'core:registration_user_view' %}">Registration</a>
+			{% if not user.is_authenticated %}
+				<a href="{% url 'core:login_user_view' %}">Login</a>
+			{% else %}
+				<a href="{% url 'core:logout_user' %}">Logout({{ user.username }})</a>
+			{% endif %}
+			<a href="{% url 'shopping_carts:shopping_cart_view' %}">Cart</a>
+			{% if user.is_authenticated %}
+				<a href="{% url 'core:profile_view' %}">Profile</a>
+			{% endif %}				
+		</nav>
+	</header>
+	<section class="content">
+		{% if messages %}
+		<article class='info-message'>
+			{% for message in messages %}
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+					<li>{{ message }}</li>
+				{% endif %}
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+					<li>{{ message }}</li>		
+				{% endif %}
+			{% endfor %}
+		</article>
+		{% endif%}
+		{% block base_content %}
+			<ul class="main-item-row">
+			{% for product in products %}
+				<a class="main-item" href="{% url 'categories:products:product_details' product.category.name product.name %}">
+					<!-- <li class="main-item"> -->
+						<div class="wrapper-img"><img src="{{ product.image.url }}" alt="{{product.name}}"></div>
+						<div class="wrapper-name">{{ product.full_name }}</div>
+					<!-- </li> -->
+				</a>
+			{% endfor %}
+			</ul>
+		{% endblock base_content %}
+	</section>
+	<footer>
+		<nav>
+			<ul>
+				<li><p>+375 29 123 45 67</p></li>
+				<li><p>+375 33 123 45 67</p></li>
+				<li><p>+375 25 123 45 67</p></li>
+				<li><p>+375 29 123 45 67</p></li>
+			</ul>
+			<ul>
+				<li><a href="#">About company</a></li>
+				<li><a href="#">Delivery</a></li>
+			</ul>
+			<ul>
+				<li><a href="#">Manufacturers</a></li>
+				<li><a href="#">Service centers</a></li>
+			</ul>
+		</nav>
+	</footer>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends 'shopping_carts/base.html' %}
+
+
+{% block content %}
+
+	{% for message in messages %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<p>{{ message }}</p>
+		{% endif %}
+	{% endfor %}
+
+{% endblock content %}
